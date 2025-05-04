@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - Serverless Demo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <!-- Header -->
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <h1 class="mb-3">Todo App - Serverless Architecture Demo</h1>
+                        <p class="mb-0">Sử dụng AWS Lambda, API Gateway, DynamoDB và Serverless Framework</p>
+                    </div>
+                </div>
+
+                <!-- Form thêm todo -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Thêm công việc mới</h4>
+                        <form id="todo-form">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Tiêu đề</label>
+                                <input type="text" class="form-control" id="title" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Mô tả</label>
+                                <textarea class="form-control" id="description" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Thêm</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danh sách todo -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Danh sách công việc</h4>
+                        <div class="d-flex justify-content-between mb-3">
+                            <button id="refresh-btn" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-sync-alt"></i> Làm mới
+                            </button>
+                            <div>
+                                <span id="loading-indicator" class="d-none">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>Đang tải...
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div id="todo-list" class="list-group">
+                            <!-- Todo items sẽ được thêm vào đây -->
+                        </div>
+                        
+                        <div id="empty-state" class="text-center py-5 d-none">
+                            <i class="fas fa-clipboard-list fa-3x mb-3 text-muted"></i>
+                            <p class="mb-0 text-muted">Chưa có công việc nào. Hãy thêm công việc mới!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal chỉnh sửa todo -->
+    <div class="modal fade" id="edit-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chỉnh sửa công việc</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-form">
+                        <input type="hidden" id="edit-id">
+                        <div class="mb-3">
+                            <label for="edit-title" class="form-label">Tiêu đề</label>
+                            <input type="text" class="form-control" id="edit-title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-description" class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="edit-description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="edit-completed">
+                            <label class="form-check-label" for="edit-completed">Đã hoàn thành</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="save-edit">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận xóa -->
+    <div class="modal fade" id="delete-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa công việc này?</p>
+                    <p id="delete-title" class="fw-bold"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" id="confirm-delete">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
